@@ -9,7 +9,7 @@
 1. Clone the repository
 2. Navigate to the project directory
 3. Run the following command to execute the tests:
-   - mvn clean test -Dsuite=<suite>.xml -Denvironment=<environment> ## use dev for this execution  
+   - mvn clean test -Dsuite=< suite >.xml -Denvironment=< environment > ## use dev for this execution  
 
 4. Test reports will be generated in the `target/allure-results` directory.
 5. To generate an Allure report, run the following command after test execution:
