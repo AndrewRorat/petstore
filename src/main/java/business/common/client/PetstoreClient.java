@@ -1,9 +1,8 @@
 package business.common.client;
 
-import business.pet.PetClient;
-import business.store.StoreClient;
-import business.user.UserClient;
-import io.restassured.specification.RequestSpecification;
+import business.clients.pet.PetClient;
+import business.clients.store.StoreClient;
+import business.clients.user.UserClient;
 import lombok.Getter;
 
 @Getter

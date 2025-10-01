@@ -1,8 +1,8 @@
 package io.petstore.api.tests;
 
 import business.common.client.PetstoreClient;
-import business.user.User;
-import business.user.UserFactory;
+import business.models.user.User;
+import business.factories.user.UserFactory;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import org.testng.annotations.BeforeClass;

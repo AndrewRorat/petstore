@@ -1,11 +1,13 @@
 package io.petstore.api.tests;
 
 import business.common.client.PetstoreClient;
-import business.store.Order;
-import business.store.OrderFactory;
+import business.enums.OrderStatusEnum;
+import business.models.store.Order;
+import business.factories.store.OrderFactory;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import static org.hamcrest.Matchers.*;
@@ -43,7 +45,7 @@ public class StoreTests {
         api.getStore().getOrderById(order.getId())
                 .statusCode(200)
                 .body("quantity", equalTo(order.getQuantity()))
-                .body("status", isOneOf("placed"));
+                .body("status", isOneOf(OrderStatusEnum.PLACED.getName()));
 
         api.getStore().deleteOrder(order.getId())
                 .statusCode(is(200));
@@ -53,9 +55,42 @@ public class StoreTests {
                 .body("message", containsString("Order not found"));
     }
 
+    @Test(dataProvider = "statuses")
+    public void createOrderWithDifferentStatuses(String status) {
+        Order body = orders.valid();
+
+        body.setStatus(status);
+        api.getStore().placeOrder(body)
+                .statusCode(200)
+                .body("status", equalTo(status));
+
+        api.getStore().getOrderById(body.getId())
+                .statusCode(200)
+                .body("status", equalTo(status));
+
+        api.getStore().deleteOrder(body.getId()).statusCode(anyOf(is(200), is(204)));
+    }
+
     @Test
     public void createInvalidOrder() {
         api.getStore().placeOrder(orders.invalidQuantity())
                 .statusCode(anyOf(is(400)));
+    }
+
+    @Test
+    public void createWithoutPetId() {
+        Order order = orders.valid();
+        order.setPetId(null);
+        api.getStore().placeOrder(order)
+                .statusCode(is(400));
+    }
+
+    @DataProvider
+    public Object[][] statuses() {
+        return new Object[][]{
+                {OrderStatusEnum.PLACED.getName()},
+                {OrderStatusEnum.APPROVED.getName()},
+                {OrderStatusEnum.DELIVERED.getName()}
+        };
     }
 }

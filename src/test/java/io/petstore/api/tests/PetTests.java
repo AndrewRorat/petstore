@@ -1,12 +1,11 @@
 package io.petstore.api.tests;
 
 import business.common.client.PetstoreClient;
-import business.pet.Pet;
-import business.pet.PetFactory;
+import business.enums.PetStatusEnum;
+import business.models.pet.Pet;
+import business.factories.pet.PetFactory;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
-import io.restassured.response.Response;
-import io.restassured.response.ValidatableResponse;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -49,7 +48,7 @@ public class PetTests {
 
     @Test
     public void findByStatusAvailable() {
-        api.getPet().findByStatus("available")
+        api.getPet().findByStatus(PetStatusEnum.AVAILABLE.getName())
                 .statusCode(200)
                 .body("$", isA(List.class));
     }
